@@ -1,16 +1,76 @@
 # go-sql-generic-sample
 
-#### To run the application
-```shell
-go run main.go
+In modern software development, efficient data management is a crucial aspect of building robust applications. Leveraging a generic CRUD (Create, Read, Update, Delete) repository can significantly simplify data operations and enhance code maintainability.
+Inspired by [CrudRepository](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html) of Spring in Java, I developed a Generic CRUD Repository in Golang that supports "database/sql". This article introduces the structure and functionalities of this repository.
+
+### Overview
+The Generic CRUD Repository in Golang provides a set of standard methods to perform CRUD operations on a database. It implemented this interface:
+```go
+package repository
+
+import "context"
+
+type GenericRepository[T any, K any] interface {
+  All(ctx context.Context) ([]T, error)
+  Load(ctx context.Context, id K) (*T, error)
+  Create(ctx context.Context, model T) (int64, error)
+  Update(ctx context.Context, model T) (int64, error)
+  Patch(context.Context, map[string]interface{}) (int64, error)
+  Save(ctx context.Context, model T) (int64, error)
+  Delete(ctx context.Context, id K) (int64, error)
+}
 ```
+- All: Retrieves all records from a database table.
+- Load: Fetches a specific record by its ID.
+- Create: Adds a new record to the database.
+- Update: Modifies an existing record.
+- Delete: Removes a record from the database.
+- Save: Inserts a new record or updates an existing one.
+- Patch: Perform a partial update of a resource
+
+### Benefits
+- <b>Simplicity</b>: provides a set of standard CRUD (Create, Read, Update, Delete) operations out of the box, reducing the amount of boilerplate code developers need to write.
+  - Especially, it provides "Save" method, to build an insert or update statement, specified for Oracle, MySQL, MS SQL, Postgres, SQLite.
+- <b>Consistency</b>: By using Repository, the code follows a consistent pattern for data access across the application, making it easier to understand and maintain.
+- <b>Rapid Development</b>: reducing boilerplate code and ensuring transactional integrity.
+- <b>Flexibility</b>: offers flexibility and control over complex queries, because it uses "database/sql" at GO SDK level.
+- <b>Type Safety</b>: being a generic interface, it provides type-safe access to the entity objects, reducing the chances of runtime errors.
+- <b>Learning Curve</b>: it supports utilities at GO SDK level. So, a developer who works with "database/sql" at GO SDK can quickly understand and use it.
+- <b>Composite primary key</b>: it supports composite primary key.
+  - You can look at the sample at [go-sql-composite-key](https://github.com/go-tutorials/go-sql-composite-key).
+  - In this sample, the company_users has 2 primary keys: company_id and user_id
+  - You can define a GO struct, which contains 2 fields: CompanyId and UserId
+    ```go
+    package model
+    
+    type UserId struct {
+      CompanyId string `json:"companyId" gorm:"column:company_id;primary_key"`
+      UserId    string `json:"userId" gorm:"column:user_id;primary_key"`
+    }
+    ```
+
+### Use Cases for Generic CRUD Repository
+#### Basic CRUD Operations
+- Ideal for applications that require standard create, read, update, and delete operations on entities.
+#### Prototyping and Rapid Development:
+- Useful in the early stages of development for quickly setting up data access layers.
+#### Admin/Back Office Web Application:
+- In admin application where services often perform straightforward CRUD operations, CrudRepository can be very effective.
+#### Microservices:
+- In microservices architectures where services often perform straightforward CRUD operations, CrudRepository can be very effective.
+
+### Conclusion
+- The Generic CRUD Repository in Golang provides a robust and flexible solution for managing database operations. By abstracting common CRUD operations into a generic repository, developers can write cleaner, more maintainable code. This repository structure is inspired by CrudRepository of Spring in Java and adapted for the Go programming language, leveraging the power of "database/sql".
+- This implementation can be further extended to include additional functionalities and optimizations based on specific project requirements. By adopting this generic repository pattern, developers can streamline their data management tasks and focus on building feature-rich applications.
+
 
 ## Architecture
 ### Simple Layer Architecture
-![Layer Architecture](https://camo.githubusercontent.com/d9b21eb50ef70dcaebf5a874559608f475e22c799bc66fcf99fb01f08576540f/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f3830302f312a4a4459546c4b3030796730496c556a5a392d737037512e706e67)
+![Layer Architecture](https://cdn-images-1.medium.com/max/800/1*JDYTlK00yg0IlUjZ9-sp7Q.png)
 
 ### Layer Architecture with full features
-![Layer Architecture with standard features: config, health check, logging, middleware log tracing](https://camo.githubusercontent.com/aa7b739a4692eaf2b363cf9caf8b021c60082c77c98d3f8c96665b5cf4640628/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f3830302f312a6d79556b504969343265593477455f494446526176412e706e67)
+![Layer Architecture with standard features: config, health check, logging, middleware log tracing](https://cdn-images-1.medium.com/max/800/1*8UjJSv_tW0xBKFXKZu86MA.png)
+
 #### [core-go/search](https://github.com/core-go/search)
 - Build the search model at http handler
 - Build dynamic SQL for search
@@ -307,4 +367,9 @@ To configure to ignore the health check, use "skips":
 ```yaml
 middleware:
   skips: /health
+```
+
+#### To run the application
+```shell
+go run main.go
 ```
