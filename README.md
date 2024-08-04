@@ -50,19 +50,14 @@ type GenericRepository[T any, K any] interface {
     ```
 
 ### Use Cases for Generic CRUD Repository
-#### Basic CRUD Operations
-- Ideal for applications that require standard create, read, update, and delete operations on entities.
-#### Prototyping and Rapid Development:
-- Useful in the early stages of development for quickly setting up data access layers.
-#### Admin/Back Office Web Application:
-- In admin application where services often perform straightforward CRUD operations, CrudRepository can be very effective.
-#### Microservices:
-- In microservices architectures where services often perform straightforward CRUD operations, CrudRepository can be very effective.
+- <b>Basic CRUD Operations</b>: ideal for applications that require standard create, read, update, and delete operations on entities.
+- <b>Prototyping and Rapid Development</b>: useful in the early stages of development for quickly setting up data access layers.
+- <b>Admin/Back Office Web Application</b>: In admin application where services often perform straightforward CRUD operations, CrudRepository can be very effective.
+- <b>Microservices</b>: In microservices architectures where services often perform straightforward CRUD operations, CrudRepository can be very effective.
 
 ### Conclusion
 - The Generic CRUD Repository in Golang provides a robust and flexible solution for managing database operations. By abstracting common CRUD operations into a generic repository, developers can write cleaner, more maintainable code. This repository structure is inspired by CrudRepository of Spring in Java and adapted for the Go programming language, leveraging the power of "database/sql".
 - This implementation can be further extended to include additional functionalities and optimizations based on specific project requirements. By adopting this generic repository pattern, developers can streamline their data management tasks and focus on building feature-rich applications.
-
 
 ## Architecture
 ### Simple Layer Architecture
