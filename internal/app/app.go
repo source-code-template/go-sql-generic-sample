@@ -5,8 +5,8 @@ import (
 	"database/sql"
 
 	"github.com/core-go/health"
+	h "github.com/core-go/health/sql"
 	"github.com/core-go/log/zap"
-	h "github.com/core-go/sql/health"
 
 	"go-service/internal/user"
 )
@@ -23,7 +23,7 @@ func NewApp(ctx context.Context, cfg Config) (*ApplicationContext, error) {
 	}
 	logError := log.LogError
 
-	userHandler, err := user.NewUserHandler(db, logError)
+	userHandler, err := user.NewUserHandler(db, logError, cfg.Action)
 	if err != nil {
 		return nil, err
 	}

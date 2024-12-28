@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	"github.com/core-go/config"
 	"github.com/core-go/core/header"
 	"github.com/core-go/core/random"
@@ -25,7 +26,7 @@ func main() {
 
 	log.Initialize(cfg.Log)
 	r.Use(mid.BuildContext)
-	logger := mid.NewMaskLogger(cfg.MiddleWare.Request, Mask, Mask, cfg.MiddleWare.StringFormat)
+	logger := mid.NewMaskLogger(cfg.MiddleWare.Request, Mask, Mask)
 	// logger := mid.NewLogger()
 	if log.IsInfoEnable() {
 		r.Use(mid.Logger(cfg.MiddleWare, log.InfoFields, logger))

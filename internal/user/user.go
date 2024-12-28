@@ -1,11 +1,11 @@
 package user
 
 import (
-	"context"
 	"database/sql"
 	"net/http"
 
-	v "github.com/core-go/core/v10"
+	"github.com/core-go/core"
+	v "github.com/core-go/core/validator"
 	"github.com/core-go/search/query"
 	"github.com/core-go/sql/repository"
 
@@ -24,8 +24,8 @@ type UserTransport interface {
 	Delete(w http.ResponseWriter, r *http.Request)
 }
 
-func NewUserHandler(db *sql.DB, logError func(context.Context, string, ...map[string]interface{})) (UserTransport, error) {
-	validator, err := v.NewValidator()
+func NewUserHandler(db *sql.DB, logError core.Log, action *core.ActionConfig) (UserTransport, error) {
+	validator, err := v.NewValidator[*model.User]()
 	if err != nil {
 		return nil, err
 	}
@@ -36,6 +36,6 @@ func NewUserHandler(db *sql.DB, logError func(context.Context, string, ...map[st
 		return nil, err
 	}
 	userService := service.NewUserService(db, userRepository)
-	userHandler := handler.NewUserHandler(userService, validator.Validate, logError, nil)
+	userHandler := handler.NewUserHandler(userService, logError, validator.Validate, action)
 	return userHandler, nil
 }
