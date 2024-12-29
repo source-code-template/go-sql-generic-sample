@@ -36,7 +36,7 @@ func (h *UserHandler) All(w http.ResponseWriter, r *http.Request) {
 	core.JSON(w, http.StatusOK, users)
 }
 func (h *UserHandler) Load(w http.ResponseWriter, r *http.Request) {
-	id, err := core.GetRequiredString(w, r)
+	id, err := core.GetRequiredUint64(w, r)
 	if err == nil {
 		user, err := h.service.Load(r.Context(), id)
 		if err != nil {
@@ -78,7 +78,7 @@ func (h *UserHandler) Patch(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	id, err := core.GetRequiredString(w, r)
+	id, err := core.GetRequiredUint64(w, r)
 	if err == nil {
 		res, err := h.service.Delete(r.Context(), id)
 		core.AfterDeleted(w, r, res, err, h.Error)

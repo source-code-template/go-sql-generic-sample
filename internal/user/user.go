@@ -31,11 +31,12 @@ func NewUserHandler(db *sql.DB, logError core.Log, action *core.ActionConfig) (U
 	}
 
 	buildQuery := query.UseQuery[model.User, *model.UserFilter](db, "users")
-	userRepository, err := repository.NewSearchRepository[model.User, string, *model.UserFilter](db, "users", buildQuery)
+	userRepository, err := repository.NewSearchRepository[model.User, uint64, *model.UserFilter](db, "users", buildQuery)
 	if err != nil {
 		return nil, err
 	}
 	userService := service.NewUserService(db, userRepository)
 	userHandler := handler.NewUserHandler(userService, logError, validator.Validate, action)
+	// userHandler := h.Newhandler[model.User, uint64](userService, logError, validator.Validate)
 	return userHandler, nil
 }
