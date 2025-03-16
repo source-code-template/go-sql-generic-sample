@@ -12,17 +12,17 @@ import (
 
 func NewUserAdapter(db *sql.DB, buildQuery func(*model.UserFilter) (string, []interface{})) (*UserAdapter, error) {
 	userType := reflect.TypeOf(model.User{})
-	params, err := s.CreateParams(userType, db)
+	parameters, err := s.CreateParameters(userType, db)
 	if err != nil {
 		return nil, err
 	}
-	return &UserAdapter{DB: db, Params: params, BuildQuery: buildQuery}, nil
+	return &UserAdapter{DB: db, Parameters: parameters, BuildQuery: buildQuery}, nil
 }
 
 type UserAdapter struct {
 	DB         *sql.DB
 	BuildQuery func(*model.UserFilter) (string, []interface{})
-	*s.Params
+	*s.Parameters
 }
 
 func (r *UserAdapter) All(ctx context.Context) ([]model.User, error) {
