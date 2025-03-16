@@ -15,7 +15,7 @@ import (
 func NewUserHandler(service service.UserService, logError core.Log, validate core.Validate[*model.User], action *core.ActionConfig) *UserHandler {
 	userType := reflect.TypeOf(model.User{})
 	parameters := search.CreateParameters(reflect.TypeOf(model.UserFilter{}), userType)
-	attributes := core.CreateAttributes(userType, logError, action)
+	attributes := core.CreateAttributes(userType, logError, nil)
 	return &UserHandler{service: service, Validate: validate, Attributes: attributes, Parameters: parameters}
 }
 
