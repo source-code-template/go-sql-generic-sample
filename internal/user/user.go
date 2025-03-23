@@ -24,7 +24,7 @@ type UserTransport interface {
 	Delete(w http.ResponseWriter, r *http.Request)
 }
 
-func NewUserHandler(db *sql.DB, logError core.Log, action *core.ActionConfig) (UserTransport, error) {
+func NewUserHandler(db *sql.DB, logError core.Log) (UserTransport, error) {
 	validator, err := v.NewValidator[*model.User]()
 	if err != nil {
 		return nil, err
@@ -36,6 +36,6 @@ func NewUserHandler(db *sql.DB, logError core.Log, action *core.ActionConfig) (U
 		return nil, err
 	}
 	userService := service.NewUserService(db, userRepository)
-	userHandler := handler.NewUserHandler(userService, logError, validator.Validate, action)
+	userHandler := handler.NewUserHandler(userService, logError, validator.Validate)
 	return userHandler, nil
 }

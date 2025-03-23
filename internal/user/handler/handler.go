@@ -12,7 +12,7 @@ import (
 	"go-service/internal/user/service"
 )
 
-func NewUserHandler(service service.UserService, logError core.Log, validate core.Validate[*model.User], action *core.ActionConfig) *UserHandler {
+func NewUserHandler(service service.UserService, logError core.Log, validate core.Validate[*model.User]) *UserHandler {
 	userType := reflect.TypeOf(model.User{})
 	parameters := search.CreateParameters(reflect.TypeOf(model.UserFilter{}), userType)
 	attributes := core.CreateAttributes(userType, logError, nil)
